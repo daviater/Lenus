@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WorkoutApp.SitUps">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Sit Ups"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+
+            <Label x:Name="CurrentSetText"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="False"
+                   IsVisible="False"
+                />
+            <Entry x:Name="SetUpAmount"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="False"
+                   IsVisible="False"/>
+            <Button x:Name="CompleteButton"
+                    Text="Complete"
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="CenterAndExpand"
+                    IsEnabled="False"
+                    IsVisible="False"
+                    Clicked="Complete_Button_Clicked"
+                    />
+            <Button x:Name="QuitButton"
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="CenterAndExpand"
+                    IsEnabled="False"
+                    IsVisible="False"
+                    Clicked="Quit_Button_Clicked"
+                />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
