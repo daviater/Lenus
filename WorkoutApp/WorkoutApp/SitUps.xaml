@@ -7,14 +7,20 @@
             <Label Text="Sit Ups"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
-
+            
+            <Label x:Name="AllSetsText"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="False"
+                   IsVisible="False"
+            />
             <Label x:Name="CurrentSetText"
                    VerticalOptions="CenterAndExpand"
                    HorizontalOptions="CenterAndExpand"
                    IsEnabled="False"
                    IsVisible="False"
                 />
-            <Entry x:Name="SetUpAmount"
+            <Entry x:Name="SitUpAmount"
                    VerticalOptions="CenterAndExpand"
                    HorizontalOptions="CenterAndExpand"
                    IsEnabled="False"
@@ -34,6 +40,14 @@
                     IsVisible="False"
                     Clicked="Quit_Button_Clicked"
                 />
+            <Button x:Name="ResetButton"
+                    VerticalOptions="Start"
+                    HorizontalOptions="End"
+                    Text="RESET"
+                    IsEnabled="False"
+                    IsVisible="False"
+                    Clicked="Reset_Button_Clicked"
+                    />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
