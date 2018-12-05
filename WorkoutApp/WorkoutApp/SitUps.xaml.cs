@@ -26,21 +26,43 @@ namespace WorkoutApp
 		{
 			InitializeComponent ();
 
-            string _goal = null;
-            string _latest = null;
+            //string _goal = null;
+            //string _latest = null;
 
-            try {//Try's to access Goals and latest situps 
-                _goal = (Application.Current.Properties["situp_goal"].ToString());
-                _latest = (Application.Current.Properties["situp_latest"].ToString());
-            }
-            catch(Exception e)
+
+            i_Goal = Storage.getGoal("situp");
+            i_Latest_Total = Storage.getLatest("situp");
+
+            if(i_Goal == 0)
             {
-               
+                b_Setup = false;
             }
+            else
+            {
+                b_Setup = true;
+            }
+
+            if (i_Latest_Total == 0){
+                b_Latest_Entry = false;
+            }
+            else{
+                b_Latest_Entry = true;
+            }
+            
+            /*if (Application.Current.Properties.ContainsKey("situp_goal"))//Checks if the goal has been entered before
+            {
+                _goal = (Application.Current.Properties["situp_goal"].ToString());//pulls data from dictionary
+            }
+
+            if (Application.Current.Properties.ContainsKey("situps_latest"))//Checks if situps have been completed before
+            {
+                _latest = (Application.Current.Properties["situp_latest"].ToString());//puls data from dictionary
+            }
+
             
             if (_goal != null)
             {
-                i_Goal = int.Parse(_goal);
+                i_Goal = int.Parse(_goal);//parses goal to int
                 b_Setup = true;
                 if(_latest != null)
                 {
@@ -56,7 +78,7 @@ namespace WorkoutApp
             {
                 b_Setup = false;
                 b_Latest_Entry = false;
-            }
+            }*/
 
             if (b_Setup && b_Latest_Entry)//Sets the Amount of sit ups to complete in the text fields
             {
@@ -67,9 +89,9 @@ namespace WorkoutApp
                 {
                     if((AllSetsText.Text != null) || (AllSetsText.Text == ""))
                     {
-                        AllSetsText.Text += " - ";
+                        AllSetsText.Text = " - " + AllSetsText.Text;
                     }
-                    AllSetsText.Text += i_current_session / (i + 1);
+                    AllSetsText.Text = (i_current_session / (i + 1)) + AllSetsText.Text;
                     ia_Current_Session[i] = i_current_session/(i + 1);
                     i_current_session -= i_current_session / (i + 1);
                 }
@@ -140,16 +162,18 @@ namespace WorkoutApp
                 else
                 {
                     CurrentSetText.Text = "Completed";
-                    Application.Current.Properties["situp_latest"] = "" + (i_Latest_Total + 8);
-                    Application.Current.SavePropertiesAsync();
+                    Storage.setLatest("situp", i_Latest_Total + 8);
+                    //Application.Current.Properties["situp_latest"] = "" + (i_Latest_Total + 8);
+                   //Application.Current.SavePropertiesAsync();
                 }
             }
             else if (b_Setup)
             {
                 if((SitUpAmount.Text != "") && (int.TryParse(SitUpAmount.Text, out int i))){
                     CurrentSetText.Text = "Completed";
-                    Application.Current.Properties["situp_latest"] = "" + int.Parse(SitUpAmount.Text);
-                    Application.Current.SavePropertiesAsync();
+                    Storage.setLatest("situp", i);
+                    //Application.Current.Properties["situp_latest"] = "" + i;
+                    //Application.Current.SavePropertiesAsync();
                     b_Latest_Entry = true;
 
 
@@ -166,8 +190,9 @@ namespace WorkoutApp
                 if ((SitUpAmount.Text != "") && (int.TryParse(SitUpAmount.Text, out int i))){
 
                     CurrentSetText.Text = "Please enter the maximum amount of sit ups you can complete";
-                    Application.Current.Properties["situp_goal"] = "" + int.Parse(SitUpAmount.Text);
-                    Application.Current.SavePropertiesAsync();
+                    Storage.setGoal("situp", i);
+                    //Application.Current.Properties["situp_goal"] = "" + i;
+                    //Application.Current.SavePropertiesAsync();
                     b_Setup = true;
 
                     SitUpAmount.Text = "";
@@ -185,11 +210,13 @@ namespace WorkoutApp
             b_Setup = false;
             b_Latest_Entry = false;
 
-            Application.Current.Properties["situp_latest"] = null;
+            Storage.resetValues("situp");
+
+            /*Application.Current.Properties["situp_latest"] = null;
             Application.Current.SavePropertiesAsync();
 
             Application.Current.Properties["situp_goal"] = null;
-            Application.Current.SavePropertiesAsync();
+            Application.Current.SavePropertiesAsync();*/
 
             CurrentSetText.Text = "Please enter the amount of sit ups you want to be able to do";
             CurrentSetText.IsEnabled = true;
