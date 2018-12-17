@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="WorkoutApp.SitUps">
+             x:Class="WorkoutApp.SitUps"
+             xmlns:local="clr-namespace:WorkoutApp">
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Sit Ups"
@@ -24,7 +25,28 @@
                    VerticalOptions="CenterAndExpand"
                    HorizontalOptions="CenterAndExpand"
                    IsEnabled="False"
-                   IsVisible="False"/>
+                   IsVisible="False"
+                   />
+           <Label x:Name="RestText"
+                  VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="True"
+                   IsVisible="False"
+                   Text="Rest For:"/>
+            <local:CountDownTimer x:Name="TimerText" 
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="True"
+                   IsVisible="False"
+                   Text="Timer stating"/>
+            <Button x:Name="StartButton"
+                   Text="Start"
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="CenterAndExpand"
+                    IsEnabled="False"
+                    IsVisible="False"
+                    Clicked="Start_Button_Clicked"
+                   />
             <Button x:Name="CompleteButton"
                     Text="Complete"
                     VerticalOptions="CenterAndExpand"

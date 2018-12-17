@@ -2,17 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+
 
 namespace WorkoutApp
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SitUps : ContentPage
 	{
-        
+        Thread timerThread;
+        int i_TimeSet = 30;
+        float f_TimeFloat;
+        static bool b_TimerStarted = false;
+        static bool b_TimerFinished = false;
+
         int i_Highest_Total;//Highest sit ups completed
         int i_Goal;//Sit up goal
         int[] ia_Current_Session;//Current sets to complete
@@ -29,6 +37,7 @@ namespace WorkoutApp
             //string _goal = null;
             //string _latest = null;
 
+            
 
             i_Goal = Storage.getGoal("situp");
             i_Latest_Total = Storage.getLatest("situp");
@@ -82,35 +91,7 @@ namespace WorkoutApp
 
             if (b_Setup && b_Latest_Entry)//Sets the Amount of sit ups to complete in the text fields
             {
-                ia_Current_Session = new int[8];
-                int i_current_session = i_Latest_Total;
-                
-                for(int i = 7; i >= 0; i--)
-                {
-                    if((AllSetsText.Text != null) || (AllSetsText.Text == ""))
-                    {
-                        AllSetsText.Text = " - " + AllSetsText.Text;
-                    }
-                    AllSetsText.Text = (i_current_session / (i + 1)) + AllSetsText.Text;
-                    ia_Current_Session[i] = i_current_session/(i + 1);
-                    i_current_session -= i_current_session / (i + 1);
-                }
-
-                AllSetsText.IsEnabled = true;
-                AllSetsText.IsVisible = true;
-
-                CurrentSetText.Text = "" + ia_Current_Session[0];
-                CurrentSetText.IsEnabled = true;
-                CurrentSetText.IsVisible = true;
-
-                CompleteButton.IsEnabled = true;
-                CompleteButton.IsVisible = true;
-
-                QuitButton.IsEnabled = true;
-                QuitButton.IsVisible = true;
-
-                ResetButton.IsVisible = true;
-                ResetButton.IsEnabled = true;
+                setUpStart();
             }
             else if (b_Setup)
             {
@@ -150,14 +131,45 @@ namespace WorkoutApp
             }
 		}
 
+        private void Start_Button_Clicked(Object sender, EventArgs e)
+        {
+            setUpSets();
+        }
+
         private void Complete_Button_Clicked(Object sender, EventArgs e)
         {
             if (b_Setup && b_Latest_Entry)
             {
                 if(i_Current_Set_Number < 7)// sets next set of sit ups
                 {
-                    i_Current_Set_Number++;
-                    CurrentSetText.Text = "" + ia_Current_Session[i_Current_Set_Number];
+
+                    if (b_TimerStarted)
+                    {
+                        TimerText.TimerStop();
+                        TimerText.IsVisible = false;
+                        RestText.IsVisible = false;
+                        TimerText.Text = "Timer Starting";
+                        i_Current_Set_Number++;
+                        
+                        CurrentSetText.IsVisible = true;
+                        CurrentSetText.Text = "" + ia_Current_Session[i_Current_Set_Number];
+                        b_TimerStarted = false;
+                    }
+                    else
+                    {
+                        RestText.IsVisible = true;
+                        
+                        TimerText.IsVisible = true;
+                        
+                        CurrentSetText.IsVisible = false;
+
+
+                        TimerStart();
+                        //timerThread = new Thread(TimerStart);
+
+                        //timerThread.Start();
+                    }
+                    
                 }
                 else
                 {
@@ -234,6 +246,87 @@ namespace WorkoutApp
 
             SitUpAmount.IsVisible = true;
             SitUpAmount.IsEnabled = true;
+        }
+
+        private void setUpSets()
+        {
+            ia_Current_Session = new int[8];
+            int i_current_session = i_Latest_Total;
+
+            AllSetsText.Text = "";
+
+            for (int i = 7; i >= 0; i--)
+            {
+                if ((AllSetsText.Text != null) || (AllSetsText.Text == ""))
+                {
+                    AllSetsText.Text = " - " + AllSetsText.Text;
+                }
+                AllSetsText.Text = (i_current_session / (i + 1)) + AllSetsText.Text;
+                ia_Current_Session[i] = i_current_session / (i + 1);
+                i_current_session -= i_current_session / (i + 1);
+            }
+
+            AllSetsText.IsEnabled = true;
+            AllSetsText.IsVisible = true;
+
+            CurrentSetText.Text = "" + ia_Current_Session[0];
+            CurrentSetText.IsEnabled = true;
+            CurrentSetText.IsVisible = true;
+
+            CompleteButton.IsEnabled = true;
+            CompleteButton.IsVisible = true;
+
+            StartButton.IsEnabled = false;
+            StartButton.IsVisible = false;
+
+            QuitButton.IsEnabled = true;
+            QuitButton.IsVisible = true;
+
+            ResetButton.IsVisible = true;
+            ResetButton.IsEnabled = true;
+        }
+
+        private void setUpStart()
+        {
+            ia_Current_Session = new int[8];
+            int i_current_session = i_Latest_Total;
+
+            for (int i = 7; i >= 0; i--)
+            {
+                if ((AllSetsText.Text != null) || (AllSetsText.Text == ""))
+                {
+                    AllSetsText.Text = " - " + AllSetsText.Text;
+                }
+                AllSetsText.Text = (i_current_session / (i + 1)) + AllSetsText.Text;
+                ia_Current_Session[i] = i_current_session / (i + 1);
+                i_current_session -= i_current_session / (i + 1);
+            }
+
+            AllSetsText.IsEnabled = true;
+            AllSetsText.IsVisible = true;
+
+            CurrentSetText.Text = "" + i_Latest_Total;
+            CurrentSetText.IsEnabled = true;
+            CurrentSetText.IsVisible = true;
+
+
+            StartButton.IsEnabled = true;
+            StartButton.IsVisible = true;
+
+            QuitButton.IsEnabled = true;
+            QuitButton.IsVisible = true;
+
+            ResetButton.IsVisible = true;
+            ResetButton.IsEnabled = true;
+        }
+
+
+        private void TimerStart()
+        {
+            b_TimerStarted = true;
+            TimerText.SetValue(CountDownTimer.CountDownSecondsProperty, i_TimeSet);
+            TimerText.SetValue(CountDownTimer.CountDownMinutesProperty, 0);
+            TimerText.TimerStart();
         }
     }
 }
