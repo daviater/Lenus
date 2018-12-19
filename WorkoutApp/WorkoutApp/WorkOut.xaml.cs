@@ -13,87 +13,58 @@ using Xamarin.Forms.Xaml;
 namespace WorkoutApp
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class SitUps : ContentPage
+	public partial class WorkOut : ContentPage
 	{
-        Thread timerThread;
-        int i_TimeSet = 30;
-        float f_TimeFloat;
-        static bool b_TimerStarted = false;
-        static bool b_TimerFinished = false;
 
+        Exercise e_Exercise;
+
+        int i_TimeSet = 30;
+        
+        static bool b_TimerStarted = false;
+
+        string s_Exercise;
         int i_Highest_Total;//Highest sit ups completed
-        int i_Goal;//Sit up goal
+        //int i_Goal;//Sit up goal
         int[] ia_Current_Session;//Current sets to complete
         DateTime dt_Latest_Date;//Date of latest completed workout
-        int i_Latest_Total = 0;//Latest_Total
+        //int i_Latest_Total = 0;//Latest_Total
         int i_Current_Set_Number = 0;
-        bool b_Setup;//True if a goal has been set
-        bool b_Latest_Entry;//True if sit ups have been completed before
+        //bool b_Setup;//True if a goal has been set
+        //bool b_Latest_Entry;//True if sit ups have been completed before
 
-		public SitUps ()
+		public WorkOut (String s_ExerciseKey, String s_ExerciseName)
 		{
 			InitializeComponent ();
 
-            //string _goal = null;
-            //string _latest = null;
+            s_Exercise = s_ExerciseKey;
+            e_Exercise = Storage.GetExercise(s_ExerciseKey, s_ExerciseName);
 
-            
+            //i_Goal = Storage.getGoal(s_Exercise);
+            //i_Latest_Total = Storage.getLatest(s_Exercise);
 
-            i_Goal = Storage.getGoal("situp");
-            i_Latest_Total = Storage.getLatest("situp");
-
-            if(i_Goal == 0)
+           /* if(i_Goal == 0)
             {
                 b_Setup = false;
             }
             else
             {
                 b_Setup = true;
-            }
+            }*/
 
-            if (i_Latest_Total == 0){
+            /*if (i_Latest_Total == 0){
                 b_Latest_Entry = false;
             }
             else{
                 b_Latest_Entry = true;
-            }
-            
-            /*if (Application.Current.Properties.ContainsKey("situp_goal"))//Checks if the goal has been entered before
-            {
-                _goal = (Application.Current.Properties["situp_goal"].ToString());//pulls data from dictionary
-            }
-
-            if (Application.Current.Properties.ContainsKey("situps_latest"))//Checks if situps have been completed before
-            {
-                _latest = (Application.Current.Properties["situp_latest"].ToString());//puls data from dictionary
-            }
-
-            
-            if (_goal != null)
-            {
-                i_Goal = int.Parse(_goal);//parses goal to int
-                b_Setup = true;
-                if(_latest != null)
-                {
-                    i_Latest_Total = int.Parse(_latest) + 8;//Sets todays sets to 8 higher than the last one
-                    b_Latest_Entry = true;
-                }
-                else
-                {
-                    b_Latest_Entry = false;
-                }
-            }
-            else
-            {
-                b_Setup = false;
-                b_Latest_Entry = false;
             }*/
+            
+            
 
-            if (b_Setup && b_Latest_Entry)//Sets the Amount of sit ups to complete in the text fields
+            if (e_Exercise.b_setupGoal && e_Exercise.b_setupLatest)//Sets the Amount of sit ups to complete in the text fields
             {
                 setUpStart();
             }
-            else if (b_Setup)
+            else if (e_Exercise.b_setupGoal)
             {
                 CurrentSetText.Text = "Please enter the maximum amount of sit ups you can complete";
                 CurrentSetText.IsEnabled = true;
@@ -133,12 +104,17 @@ namespace WorkoutApp
 
         private void Start_Button_Clicked(Object sender, EventArgs e)
         {
-            setUpSets();
+            //setUpSets();
+            CurrentSetText.Text = "" + ia_Current_Session[0];
+            CompleteButton.IsEnabled = true;
+            CompleteButton.IsVisible = true;
+            StartButton.IsEnabled = false;
+            StartButton.IsVisible = false;
         }
 
         private void Complete_Button_Clicked(Object sender, EventArgs e)
         {
-            if (b_Setup && b_Latest_Entry)
+            if (e_Exercise.b_setupGoal && e_Exercise.b_setupLatest)
             {
                 if(i_Current_Set_Number < 7)// sets next set of sit ups
                 {
@@ -165,28 +141,37 @@ namespace WorkoutApp
 
 
                         TimerStart();
-                        //timerThread = new Thread(TimerStart);
-
-                        //timerThread.Start();
+                        
                     }
                     
                 }
                 else
                 {
-                    CurrentSetText.Text = "Completed";
-                    Storage.setLatest("situp", i_Latest_Total + 8);
-                    //Application.Current.Properties["situp_latest"] = "" + (i_Latest_Total + 8);
-                   //Application.Current.SavePropertiesAsync();
+                    CurrentSetText.Text = "Completed, How was your workout?";
+                    e_Exercise.i_Current += 8;
+                    e_Exercise.b_setupLatest = true;
+                    Storage.SetExercise(s_Exercise, e_Exercise);
+                    //Storage.setLatest(s_Exercise, e_Exercise.i_Current + 8);
+
+                    EasyButton.IsEnabled = true;
+                    EasyButton.IsVisible = true;
+                    PerfectButton.IsEnabled = true;
+                    PerfectButton.IsVisible = true;
+                    HardButton.IsEnabled = true;
+                    HardButton.IsEnabled = true;
+
                 }
             }
-            else if (b_Setup)
+            else if (e_Exercise.b_setupGoal)
             {
                 if((SitUpAmount.Text != "") && (int.TryParse(SitUpAmount.Text, out int i))){
                     CurrentSetText.Text = "Completed";
-                    Storage.setLatest("situp", i);
-                    //Application.Current.Properties["situp_latest"] = "" + i;
-                    //Application.Current.SavePropertiesAsync();
-                    b_Latest_Entry = true;
+                    e_Exercise.i_Current = i;
+                    e_Exercise.b_setupLatest = true;
+                    Storage.SetExercise(s_Exercise, e_Exercise);
+                    //Storage.setLatest(s_Exercise, i);
+                    
+                   // e_Exercise.b_setupLatest = true;
 
 
 
@@ -202,33 +187,62 @@ namespace WorkoutApp
                 if ((SitUpAmount.Text != "") && (int.TryParse(SitUpAmount.Text, out int i))){
 
                     CurrentSetText.Text = "Please enter the maximum amount of sit ups you can complete";
-                    Storage.setGoal("situp", i);
-                    //Application.Current.Properties["situp_goal"] = "" + i;
-                    //Application.Current.SavePropertiesAsync();
-                    b_Setup = true;
+                    e_Exercise.i_Goal = i;
+                    e_Exercise.b_setupGoal = true;
+                    Storage.SetExercise(s_Exercise ,e_Exercise);
+                    //Storage.setGoal(s_Exercise, i);
+                    
+                    //e_Exercise.b_setupGoal = true;
 
                     SitUpAmount.Text = "";
                 }
             }
         }
 
+        private void Preference_Button_Clicked(Object sender, EventArgs e)
+        {
+            if( (Button)sender == EasyButton)
+            {
+                CurrentSetText.Text = "Great! It'll be harder next time";
+                e_Exercise.i_LatestPreference = 1;
+                e_Exercise.b_LatestPreferenceEntered = true;
+            }
+            if((Button)sender == PerfectButton)
+            {
+                CurrentSetText.Text = "Awesome!";
+                e_Exercise.i_LatestPreference = 2;
+                e_Exercise.b_LatestPreferenceEntered = true;
+            }
+            if((Button)sender == HardButton)
+            {
+                CurrentSetText.Text = "don't worry, It'll be easier next time";
+                e_Exercise.i_LatestPreference = 3;
+                e_Exercise.b_LatestPreferenceEntered = true;
+            }
+            Storage.SetExercise(s_Exercise, e_Exercise);
+
+            EasyButton.IsEnabled = false;
+            EasyButton.IsVisible = false;
+            PerfectButton.IsEnabled = false;
+            PerfectButton.IsVisible = false;
+            HardButton.IsEnabled = false;
+            HardButton.IsEnabled = false;
+        }
+
         private void Quit_Button_Clicked(Object sender, EventArgs e)
         {
-
+            Navigation.PopAsync();
         }
 
         private void Reset_Button_Clicked(Object sender, EventArgs e)
         {
-            b_Setup = false;
-            b_Latest_Entry = false;
+            e_Exercise.b_setupGoal = false;
+            e_Exercise.b_setupLatest = false;
 
-            Storage.resetValues("situp");
+            Storage.resetValues(s_Exercise, e_Exercise);
 
-            /*Application.Current.Properties["situp_latest"] = null;
-            Application.Current.SavePropertiesAsync();
-
-            Application.Current.Properties["situp_goal"] = null;
-            Application.Current.SavePropertiesAsync();*/
+            StartButton.IsEnabled = false;
+            StartButton.IsVisible = false;
 
             CurrentSetText.Text = "Please enter the amount of sit ups you want to be able to do";
             CurrentSetText.IsEnabled = true;
@@ -248,48 +262,12 @@ namespace WorkoutApp
             SitUpAmount.IsEnabled = true;
         }
 
-        private void setUpSets()
-        {
-            ia_Current_Session = new int[8];
-            int i_current_session = i_Latest_Total;
-
-            AllSetsText.Text = "";
-
-            for (int i = 7; i >= 0; i--)
-            {
-                if ((AllSetsText.Text != null) || (AllSetsText.Text == ""))
-                {
-                    AllSetsText.Text = " - " + AllSetsText.Text;
-                }
-                AllSetsText.Text = (i_current_session / (i + 1)) + AllSetsText.Text;
-                ia_Current_Session[i] = i_current_session / (i + 1);
-                i_current_session -= i_current_session / (i + 1);
-            }
-
-            AllSetsText.IsEnabled = true;
-            AllSetsText.IsVisible = true;
-
-            CurrentSetText.Text = "" + ia_Current_Session[0];
-            CurrentSetText.IsEnabled = true;
-            CurrentSetText.IsVisible = true;
-
-            CompleteButton.IsEnabled = true;
-            CompleteButton.IsVisible = true;
-
-            StartButton.IsEnabled = false;
-            StartButton.IsVisible = false;
-
-            QuitButton.IsEnabled = true;
-            QuitButton.IsVisible = true;
-
-            ResetButton.IsVisible = true;
-            ResetButton.IsEnabled = true;
-        }
+       
 
         private void setUpStart()
         {
             ia_Current_Session = new int[8];
-            int i_current_session = i_Latest_Total;
+            int i_current_session = e_Exercise.i_Current;
 
             for (int i = 7; i >= 0; i--)
             {
@@ -305,7 +283,7 @@ namespace WorkoutApp
             AllSetsText.IsEnabled = true;
             AllSetsText.IsVisible = true;
 
-            CurrentSetText.Text = "" + i_Latest_Total;
+            CurrentSetText.Text = "" + e_Exercise.i_Current;
             CurrentSetText.IsEnabled = true;
             CurrentSetText.IsVisible = true;
 

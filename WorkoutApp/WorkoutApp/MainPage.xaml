@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:WorkoutApp"
              x:Class="WorkoutApp.MainPage">
 
-    <StackLayout>
+    <StackLayout x:Name="MainLayout">
         <!-- Place new controls here -->
         <Label Text="Leanus" 
            HorizontalOptions="Center"
@@ -13,12 +13,7 @@
            HorizontalOptions="Center"
            VerticalOptions="StartAndExpand" />
 
-        <Button x:Name="SitUpsButton"
-                Text="Sit Ups"
-                HorizontalOptions="Center"
-                VerticalOptions="CenterAndExpand"
-                Clicked="Sit_Ups_Clicked"
-                />
+        
     </StackLayout>
 
 </ContentPage>

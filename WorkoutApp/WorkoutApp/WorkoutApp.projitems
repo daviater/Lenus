@@ -17,17 +17,18 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CountDownTimer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exercise.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)SitUps.xaml.cs">
-      <DependentUpon>SitUps.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)WorkOut.xaml.cs">
+      <DependentUpon>WorkOut.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Storage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)SitUps.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WorkOut.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>

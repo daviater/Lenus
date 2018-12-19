@@ -11,7 +11,7 @@ namespace WorkoutApp
         {
             _CancellationTokenSource = new CancellationTokenSource();
             FontFamily = "sans-serif-light";
-            FontSize = 64;
+            FontSize = 45;
             TextColor = Color.Black;
         }
 
