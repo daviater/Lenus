@@ -12,7 +12,7 @@ namespace WorkoutApp
         public string s_Name;
         public int i_Goal;
         public int i_Current;
-        public int i_NumberOfSets;
+        public int i_NumberOfSets = 8;
         public float f_DistanceGoal;
         public float f_DistanceCurrent;
         public float f_TimeGoal;
@@ -38,7 +38,7 @@ namespace WorkoutApp
         s_Name = "";
         i_Goal = 0;
         i_Current = 0;
-        i_NumberOfSets = 0;
+        i_NumberOfSets = 8;
         f_DistanceGoal = 0.0f;
         f_DistanceCurrent = 0.0f;
         f_TimeGoal = 0.0f;

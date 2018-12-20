@@ -4,16 +4,72 @@
              xmlns:local="clr-namespace:WorkoutApp"
              x:Class="WorkoutApp.MainPage">
 
-    <StackLayout x:Name="MainLayout">
+    <StackLayout x:Name="MainLayout"
+                 BackgroundColor="CornflowerBlue">
         <!-- Place new controls here -->
+        <StackLayout VerticalOptions="Start"
+                     BackgroundColor="Tan">
         <Label Text="Leanus" 
            HorizontalOptions="Center"
-           VerticalOptions="StartAndExpand" />
+           VerticalOptions="Start" />
         <Label Text="Workout App" 
            HorizontalOptions="Center"
-           VerticalOptions="StartAndExpand" />
+           VerticalOptions="Start" />
+        </StackLayout>
+        <ScrollView x:Name="ScrollScreen" 
+                    VerticalOptions="CenterAndExpand"
+                    >
+            <StackLayout x:Name="InnerStack"
+                         BackgroundColor="CornflowerBlue">
+                <Label  x:Name="EnterNameText"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="False"
+                   IsVisible="False"
+                   Text="Enter Name of Workout"
+                        />
+                <Entry x:Name="NewWorkoutEntry"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="False"
+                   IsVisible="False"
+                   />
+                <Button x:Name="Entrybutton"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="False"
+                   IsVisible="False"
+                   Text="Enter"
+                   Clicked="Enter_Button_Clicked"     
+                        BackgroundColor="White"/>
+                
+            </StackLayout>
+        </ScrollView>
 
-        
+        <StackLayout Orientation="Horizontal"
+                         Margin="10">
+
+            <Button x:Name="AddWorkoutButton"
+                    VerticalOptions="End"
+                    HorizontalOptions="StartAndExpand"
+                    IsEnabled="True"
+                    Text="Add Workout"
+                    Clicked="Add_Button_Clicked"
+                    BackgroundColor="White"
+                />
+
+
+            <Button x:Name="DeleteWorkoutbutton"
+                    VerticalOptions="End"
+                    HorizontalOptions="EndAndExpand"
+                    Text="Delete Workout"
+                    IsEnabled="True"
+                    IsVisible="True"
+                    Clicked="Delete_Button_Clicked"
+                    BackgroundColor="White"
+                    />
+        </StackLayout>
+
     </StackLayout>
 
 </ContentPage>

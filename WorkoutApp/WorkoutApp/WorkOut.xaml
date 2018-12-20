@@ -4,97 +4,153 @@
              x:Class="WorkoutApp.WorkOut"
              xmlns:local="clr-namespace:WorkoutApp">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Sit Ups"
-                VerticalOptions="CenterAndExpand" 
+        <StackLayout Spacing="10"
+                     BackgroundColor="CornflowerBlue">
+            <StackLayout VerticalOptions="StartAndExpand"
+                         BackgroundColor="Tan">
+            <Label x:Name="TitleText"
+                VerticalOptions="Start" 
                 HorizontalOptions="CenterAndExpand" />
             
             <Label x:Name="AllSetsText"
-                   VerticalOptions="CenterAndExpand"
+                   VerticalOptions="StartAndExpand"
                    HorizontalOptions="CenterAndExpand"
                    IsEnabled="False"
                    IsVisible="False"
             />
-            <Label x:Name="CurrentSetText"
-                   VerticalOptions="CenterAndExpand"
+            </StackLayout>
+            <StackLayout VerticalOptions="CenterAndExpand"
+                         BackgroundColor="White">
+
+                <Label x:Name="SessionText"
+                  VerticalOptions="CenterAndExpand"
                    HorizontalOptions="CenterAndExpand"
-                   IsEnabled="False"
+                   IsEnabled="True"
                    IsVisible="False"
-                />
-            <Entry x:Name="SitUpAmount"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand"
-                   IsEnabled="False"
-                   IsVisible="False"
-                   Keyboard="Numeric"
-                   />
-           <Label x:Name="RestText"
+                   Text="This Session Contains"/>
+                <Label x:Name="RestText"
                   VerticalOptions="CenterAndExpand"
                    HorizontalOptions="CenterAndExpand"
                    IsEnabled="True"
                    IsVisible="False"
                    Text="Rest For:"/>
-            <local:CountDownTimer x:Name="TimerText" 
+                <Label x:Name="CompleteText"
+                  VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="True"
+                   IsVisible="False"
+                   Text="Complete:"/>
+                <Label x:Name="CurrentSetText"
+                   VerticalOptions="Start"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="False"
+                   IsVisible="False"
+                   FontSize="42"
+                />
+                <Entry x:Name="SetAmount"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="False"
+                   IsVisible="False"
+                   Keyboard="Numeric"
+                   
+                   />
+                <Label x:Name="ToCompleteText"
+                  VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="True"
+                   IsVisible="False"
+                   Text=""/>
+                <Label x:Name="ExercisNowText"
+                  VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="True"
+                   IsVisible="False"
+                   Text=""/>
+                <local:CountDownTimer x:Name="TimerText" 
                    VerticalOptions="CenterAndExpand"
                    HorizontalOptions="CenterAndExpand"
                    IsEnabled="True"
                    IsVisible="False"
                    Text="Timer stating"/>
-            <Button x:Name="StartButton"
+                <Label x:Name="SecondsText"
+                  VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   IsEnabled="True"
+                   IsVisible="False"
+                   Text="Seconds"/>
+                
+                <Button x:Name="EasyButton"
+                    Text="Too Easy"
+                    VerticalOptions="Center"
+                    HorizontalOptions="CenterAndExpand"
+                    IsEnabled="False"
+                    IsVisible="False"
+                    Clicked="Preference_Button_Clicked"
+                    />
+                <Button x:Name="PerfectButton"
+                    Text="Perfect"
+                    VerticalOptions="Center"
+                    HorizontalOptions="CenterAndExpand"
+                    IsEnabled="False"
+                    IsVisible="False"
+                    Clicked="Preference_Button_Clicked"
+                    />
+                <Button x:Name="HardButton"
+                    Text="Too Hard"
+                    VerticalOptions="Center"
+                    HorizontalOptions="CenterAndExpand"
+                    IsEnabled="False"
+                    IsVisible="False"
+                    Clicked="Preference_Button_Clicked"
+                    />
+            </StackLayout>
+            <StackLayout VerticalOptions="EndAndExpand"
+                         Margin="10">
+                <Button x:Name="StartButton"
                    Text="Start"
                     VerticalOptions="CenterAndExpand"
                     HorizontalOptions="CenterAndExpand"
                     IsEnabled="False"
                     IsVisible="False"
                     Clicked="Start_Button_Clicked"
+                    BackgroundColor="White"
+                    FontSize="Medium"
                    />
-            <Button x:Name="CompleteButton"
+                <Button x:Name="CompleteButton"
                     Text="Complete"
-                    VerticalOptions="CenterAndExpand"
+                    VerticalOptions="StartAndExpand"
                     HorizontalOptions="CenterAndExpand"
                     IsEnabled="False"
                     IsVisible="False"
                     Clicked="Complete_Button_Clicked"
+                    BackgroundColor="White"
+                    FontSize="Medium"
                     />
-            <Button x:Name="EasyButton"
-                    Text="Too Easy"
-                    VerticalOptions="CenterAndExpand"
-                    HorizontalOptions="CenterAndExpand"
-                    IsEnabled="False"
-                    IsVisible="False"
-                    Clicked="Preference_Button_Clicked"
-                    />
-            <Button x:Name="PerfectButton"
-                    Text="Perfect"
-                    VerticalOptions="CenterAndExpand"
-                    HorizontalOptions="CenterAndExpand"
-                    IsEnabled="False"
-                    IsVisible="False"
-                    Clicked="Preference_Button_Clicked"
-                    />
-            <Button x:Name="HardButton"
-                    Text="Too Hard"
-                    VerticalOptions="CenterAndExpand"
-                    HorizontalOptions="CenterAndExpand"
-                    IsEnabled="False"
-                    IsVisible="False"
-                    Clicked="Preference_Button_Clicked"
-                    />
-            <Button x:Name="QuitButton"
-                    VerticalOptions="CenterAndExpand"
-                    HorizontalOptions="CenterAndExpand"
+            </StackLayout>
+            <StackLayout Orientation="Horizontal"
+                         Margin="10">
+                
+                <Button x:Name="QuitButton"
+                    VerticalOptions="End"
+                    HorizontalOptions="StartAndExpand"
                     IsEnabled="True"
                     Text="Quit"
                     Clicked="Quit_Button_Clicked"
+                    BackgroundColor="White"
                 />
-            <Button x:Name="ResetButton"
-                    VerticalOptions="Start"
-                    HorizontalOptions="End"
+            
+            
+                <Button x:Name="ResetButton"
+                    VerticalOptions="End"
+                    HorizontalOptions="EndAndExpand"
                     Text="RESET"
                     IsEnabled="False"
                     IsVisible="False"
                     Clicked="Reset_Button_Clicked"
+                    BackgroundColor="White"
                     />
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

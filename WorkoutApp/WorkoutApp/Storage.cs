@@ -42,13 +42,17 @@ namespace WorkoutApp
             e_Exercise.i_NumberOfSets = get<int>(s_Exercise, NUMBEROFSETS);
             e_Exercise.i_Type = get<int>(s_Exercise, TYPE);
             e_Exercise.s_Name = get<string>(s_Exercise, NAME);
+            if(e_Exercise.s_Name == "0")
+            {
+                e_Exercise.s_Name = s_Name;
+            }
             e_Exercise.i_LatestPreference = get<int>(s_Exercise, LATESTPREFERENCE);
             e_Exercise.ai_LatestSet = getArray<int>(s_Exercise, LATESTSET);
             e_Exercise.af_LatestRestTime = getArray<float>(s_Exercise, LATESTRESTTIME);
             e_Exercise.ai_LatestSetPreference = getArray<int>(s_Exercise, LATESTSETPREFERENCE);
             e_Exercise.af_LatestSetTime = getArray<float>(s_Exercise, LATESTSETTIME);
             e_Exercise.b_LatestPreferenceEntered = get<bool>(s_Exercise, LATESTPREFERENCEENTERED);
-
+            
             return e_Exercise;
         }
 
@@ -224,5 +228,81 @@ namespace WorkoutApp
 
             return as_MenuItems;
         }
-    }
+
+        public static void addMenuItem(String s_Name)
+        {
+            int i_MenuAmount;
+            string s_MenuAmount = null;
+            string s_Key = s_Name.ToLower();
+            s_Key = s_Key.Replace(" ", "");
+
+            if (Application.Current.Properties.ContainsKey("MenuAmount"))
+            {
+                s_MenuAmount = ((String)Application.Current.Properties["MenuAmount"]);
+            }
+
+            if (s_MenuAmount != null)
+            {
+                i_MenuAmount = int.Parse(s_MenuAmount);
+                Application.Current.Properties["MenuAmount"] = "" + (i_MenuAmount+1);
+
+                Application.Current.Properties["MenuName" + i_MenuAmount] = "" + s_Name;
+                Application.Current.Properties["MenuKey" + i_MenuAmount] = "" + s_Key;
+            }
+        }
+
+        public static void removeMenuItem(int postion)
+        {
+            int i_MenuAmount;
+            String s_MenuAmount = null;
+            string[] as_MenuNames;
+            string[] as_MenuKeys;
+
+            if (Application.Current.Properties.ContainsKey("MenuAmount"))
+            {
+                s_MenuAmount = ((String)Application.Current.Properties["MenuAmount"]);
+            }
+
+            if (s_MenuAmount != null)
+            {
+                i_MenuAmount = int.Parse(s_MenuAmount);
+                Application.Current.Properties["MenuAmount"] = "" + (i_MenuAmount -1);
+
+                as_MenuNames = new string[i_MenuAmount-1];
+                as_MenuKeys = new string[i_MenuAmount-1];
+                for (int i = 0; i < i_MenuAmount; i++)
+                {
+                    if (i < postion)
+                    {
+                        if (Application.Current.Properties.ContainsKey("MenuName" + i))
+                        {
+                            as_MenuNames[i] = ((String)Application.Current.Properties["MenuName" + i]);
+                        }
+                        if (Application.Current.Properties.ContainsKey("MenuKey" + i))
+                        {
+                            as_MenuKeys[i] = ((String)Application.Current.Properties["MenuKey" + i]);
+                        }
+                    }
+                    else if (i> postion)
+                    {
+                        if (Application.Current.Properties.ContainsKey("MenuName" + i))
+                        {
+                            as_MenuNames[i-1] = ((String)Application.Current.Properties["MenuName" + i]);
+                        }
+                        if (Application.Current.Properties.ContainsKey("MenuKey" + i))
+                        {
+                            as_MenuKeys[i-1] = ((String)Application.Current.Properties["MenuKey" + i]);
+                        }
+                    }
+                }
+
+                for (int i = 0; i < as_MenuKeys.Length; i++)
+                {
+                    Application.Current.Properties["MenuName" + i] = "" + as_MenuNames[i];
+                    Application.Current.Properties["MenuKey" + i] = "" + as_MenuKeys[i];
+                }
+
+            }
+        }
+       }
 }
